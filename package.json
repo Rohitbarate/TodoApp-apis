@@ -1,0 +1,16 @@
+{
+  "name": "todo-app-apis",
+  "version": "1.0.0",
+  "description": "you can make simple todo app using this api's.For learning api integration this is the best project. see more details in the readMe file.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "todo-app",
+    "api",
+    "react-project"
+  ],
+  "author": "rohitBarate100",
+  "license": "ISC"
+}
