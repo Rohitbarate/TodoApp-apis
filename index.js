@@ -8,8 +8,3 @@ connectToDB(process.env.DB_URL);
 app.listen(PORT,()=>{
     console.log(`Todo App is running on port : ${PORT}`)
 })
-
-// testing
-app.get('/',(req,res)=>{
-    res.send("everything is perfect...!")
-})
