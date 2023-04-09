@@ -11,7 +11,7 @@ const connectToDB = (url) => {
     .then(() => {
       console.log("Database connected successfully....!");
     })
-    .catch(() => {
+    .catch((err) => {
       console.log("Database Connection Failed...!");
       console.log(err);
       process.exit(1);

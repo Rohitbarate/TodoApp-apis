@@ -13,14 +13,16 @@ app.use(cookieParser());
 
 // testing
 app.get('/',(req,res)=>{
-    res.send("everything is perfect...!")
+    res
+    .send("everything is perfect...!")
+    // .download('index.js')
 })
 
 // base url endpoint
 // https://{web url}/data/v1
 
 // Routes
-app.use('/data/v1',userRoute)
+app.use('/data/v1/user',userRoute)
 // app.use('/data/v1',noteRoute)
 
 
