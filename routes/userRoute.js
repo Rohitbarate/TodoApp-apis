@@ -5,7 +5,7 @@ loginUser,
 logoutUser,
 getLoggedinUserDetails
 } = require('../controllers/userController')
-const {isLoggedIn, isLoggedin} = require('../middlewares/userMiddleware')
+const {isLoggedin} = require('../middlewares/userMiddleware')
 
 
 

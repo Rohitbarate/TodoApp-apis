@@ -23,7 +23,7 @@ app.get('/',(req,res)=>{
 
 // Routes
 app.use('/data/v1/user',userRoute)
-// app.use('/data/v1',noteRoute)
+app.use('/data/v1/note',noteRoute)
 
 
 module.exports = app;
