@@ -1,21 +1,49 @@
 const Promise = require("../middlewares/promise");
 const Note = require("../models/note");
 
+// ........// ** TODO START ** // ...... //
+// 1) check the note which user want to update is present in that user notes (route(3));
+
+// ........// ** TODO END ** // ...... //
+
 // route(1) : create new note *--user login required--*
 exports.createNote = Promise(async (req, res, next) => {
   const { title, description, label } = req.body;
-  try {
-    let note = await Note.create({
-      userId: req.user.id,
-      title,
-      description,
-      label,
+  // console.log("id :",req.user.id)
+  let userNotes = await Note.findById(req.user.id);
+  // console.log("userNotes : ",userNotes)
+  let newNote = {
+    title: title,
+    description: description,
+    label: label,
+    deadLine: req.body?.deadLine,
+  };
+  if (!userNotes) {
+    const insertNote = await Note.create({
+      _id: req.user.id,
+      notes: [{ note: newNote }],
     });
     return res.status(201).json({
+      msg: "first note inserted successfully...!",
+      insertNote,
+    });
+  }
+  try {
+    // console.log(userNotes);
+    const updatedNote = await userNotes.addNewNote(newNote);
+    if (!updatedNote) {
+      return res.status(200).json({
+        msg: "user found but note not inserted",
+        success: true,
+      });
+    }
+    return res.status(200).json({
+      msg: "note found & inserted",
       success: true,
-      note,
+      updatedNote,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).send("internal server error :", error);
   }
 });
@@ -23,15 +51,16 @@ exports.createNote = Promise(async (req, res, next) => {
 // route(2) : get all notes of that user *--user login required--*
 exports.getNotes = Promise(async (req, res, next) => {
   try {
-    const notes = await Note.find({ userId: req.user.id });
-    if (notes.length === 0) {
-      return res.send("you don't have notes...!");
+    const user = await Note.findById(req.user.id);
+    if (!user) {
+      return res.status(404).send("you don't have notes...!");
     }
     return res.status(200).json({
       success: true,
-      notes,
+      notes: user.notes,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).send("internal server error :", error);
   }
 });
@@ -39,19 +68,75 @@ exports.getNotes = Promise(async (req, res, next) => {
 // route(3) : edit the existing note *--user login required--*
 exports.updateNote = Promise(async (req, res, next) => {
   const noteId = req.params.id;
-  const updatedNote = {
+  const updatedData = {
     title: req.body?.title,
     description: req.body?.description,
     label: req.body?.label,
     deadLine: req.body?.deadLine,
   };
   try {
-    let note = await Note.findByIdAndUpdate(noteId, {
-      updatedNote,
-    }).then(() => {
-      return res.status(200).json({ success: true, note });
+    const user = await Note.updateOne(
+      {
+        "notes._id": noteId,
+      },
+      {
+        $set: {
+          "notes.$.note.title": updatedData.title,
+          "notes.$.note.description": updatedData.description,
+          "notes.$.note.label": updatedData.label,
+          "notes.$.note.deadLine": updatedData.deadLine,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    if (!user) {
+      return res.status(404).send("you don't have notes...!");
+    }
+    return res.status(200).json({
+      success: true,
+      notes: user.notes,
     });
   } catch (error) {
-    return res.send("internal server error :", error.message);
+    console.log(error);
+    return res.status(500).send("internal server error :", error.message);
   }
 });
+
+// route(4) : delete the existing note *--user login required--*
+exports.deleteNote = Promise(async (req, res, next) => {
+  const noteId = req.params.id;
+  // console.log("user :" + req.user.id + " note : " + noteId);
+  try {
+    let userNotes = await Note.findOne({ _id: req.user.id });
+    if (!userNotes) {
+      return res.status(200).send("notes not found..!");
+    }
+    updatedNotes = await userNotes.deleteNote(noteId);
+    return res.status(200).json({
+      success: true,
+      notes: updatedNotes,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("internal server error :", error);
+  }
+});
+
+// ..... demo .....//
+
+// const noteToUpdate = oldNote.find((n) => n.label === "test");
+// console.log(noteToUpdate);
+// console.log(req.user._id);
+
+//  const user = await Note.updateOne(
+//       {
+//         _id: req.user.id,
+//       },
+//       {
+//         $pull: {
+//           "notes.id": "6437c5ff2cce7d1507eba8ef",
+//         },
+//       }
+//     );

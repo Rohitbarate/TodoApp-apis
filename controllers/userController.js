@@ -86,8 +86,14 @@ exports.loginUser = Promise(async (req, res, next) => {
 
 // route(3) for logout the user
 exports.logoutUser = Promise(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.send({ message: "login first...!" });
+  }
+  const tokens = await user.deleteToken(req.cookie.token)
   res.clearCookie("token").status(200).json({
     success: true,
     message: "sign out successfully...!",
+    tokens 
   });
 });

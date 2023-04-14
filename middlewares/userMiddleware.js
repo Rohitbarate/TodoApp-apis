@@ -12,7 +12,7 @@ exports.isLoggedin = promise(async (req, res, next) => {
     const data = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id: data.id });
     req.user = user;
-    // console.log(user);
+    // console.log("middleware : ",req.user);
     next();
   } catch (error) {
     res.status(500).send({ error: "internal server error", error });
