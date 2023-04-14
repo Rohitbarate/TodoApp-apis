@@ -1,11 +1,6 @@
 const Promise = require("../middlewares/promise");
 const Note = require("../models/note");
 
-// ........// ** TODO START ** // ...... //
-// 1) check the note which user want to update is present in that user notes (route(3));
-
-// ........// ** TODO END ** // ...... //
-
 // route(1) : create new note *--user login required--*
 exports.createNote = Promise(async (req, res, next) => {
   const { title, description, label } = req.body;
@@ -124,19 +119,4 @@ exports.deleteNote = Promise(async (req, res, next) => {
   }
 });
 
-// ..... demo .....//
 
-// const noteToUpdate = oldNote.find((n) => n.label === "test");
-// console.log(noteToUpdate);
-// console.log(req.user._id);
-
-//  const user = await Note.updateOne(
-//       {
-//         _id: req.user.id,
-//       },
-//       {
-//         $pull: {
-//           "notes.id": "6437c5ff2cce7d1507eba8ef",
-//         },
-//       }
-//     );

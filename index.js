@@ -15,6 +15,7 @@ app.listen(PORT, () => {
 
 // 1) check the note which user want to update is present in that user notes (note route(3));
 
-// 2) add jwt tokens in the user profile while login
+// 2) check the note which user want to delete is present in that user notes (note route(4));
+
 
 // ........ // ** TODO END ** // ......... //
