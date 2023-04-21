@@ -19,7 +19,7 @@ const noteSchema = new Schema({
     },
     deadLine: {
       type: Date,
-      default: Date.now(),
+      default: Date(),
     },
   },
 });

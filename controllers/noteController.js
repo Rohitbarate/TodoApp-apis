@@ -19,8 +19,11 @@ exports.createNote = Promise(async (req, res, next) => {
       notes: [{ note: newNote }],
     });
     return res.status(201).json({
-      msg: "first note inserted successfully...!",
-      insertNote,
+      message: {
+        type: "success",
+        msg: "first note inserted successfully...!",
+        // insertNote,
+      },
     });
   }
   try {
@@ -33,8 +36,10 @@ exports.createNote = Promise(async (req, res, next) => {
       });
     }
     return res.status(200).json({
-      msg: "note found & inserted",
-      success: true,
+      message: {
+        type: "success",
+        msg: "Note created successfully",
+      },
       updatedNote,
     });
   } catch (error) {
@@ -48,7 +53,12 @@ exports.getNotes = Promise(async (req, res, next) => {
   try {
     const user = await Note.findById(req.user.id);
     if (!user) {
-      return res.status(404).send("you don't have notes...!");
+      return res.status(404).json({
+        message: {
+          type: "danger",
+          msg: "you don't have notes...!",
+        },
+      });
     }
     return res.status(200).json({
       success: true,
@@ -56,7 +66,12 @@ exports.getNotes = Promise(async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).send("internal server error :", error);
+    return res.status(500).json({
+      message: {
+        type: "danger",
+        msg: "error occured while fetching notes! try again.",
+      },
+    });
   }
 });
 
@@ -118,5 +133,3 @@ exports.deleteNote = Promise(async (req, res, next) => {
     return res.status(500).send("internal server error :", error);
   }
 });
-
-
