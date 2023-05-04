@@ -31,8 +31,10 @@ exports.createNote = Promise(async (req, res, next) => {
     const updatedNote = await userNotes.addNewNote(newNote);
     if (!updatedNote) {
       return res.status(200).json({
-        msg: "user found but note not inserted",
-        success: true,
+        message: {
+          type: "success",
+          msg: "error occured while creating the note ",
+        },
       });
     }
     return res.status(200).json({
@@ -102,15 +104,28 @@ exports.updateNote = Promise(async (req, res, next) => {
       }
     );
     if (!user) {
-      return res.status(404).send("you don't have notes...!");
+      return res.status(404).json({
+        message: {
+          type: "danger",
+          msg: "Selected note doesn't exist",
+        },});
     }
     return res.status(200).json({
       success: true,
       notes: user.notes,
+      message: {
+        type: "success",
+        msg: "Note updated successfully..!",
+      },
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).send("internal server error :", error.message);
+    return res.status(500).json({
+      message: {
+        type: "danger",
+        msg: "Internal server error",
+      },
+    });
   }
 });
 
@@ -121,15 +136,29 @@ exports.deleteNote = Promise(async (req, res, next) => {
   try {
     let userNotes = await Note.findOne({ _id: req.user.id });
     if (!userNotes) {
-      return res.status(200).send("notes not found..!");
+      return res.status(200).json({
+        message: {
+          type: "danger",
+          msg: "Selected note doesn't exist",
+        },
+      });
     }
     updatedNotes = await userNotes.deleteNote(noteId);
     return res.status(200).json({
       success: true,
       notes: updatedNotes,
+      message: {
+        type: "success",
+        msg: "Note deleted successfully",
+      },
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).send("internal server error :", error);
+    return res.status(500).json({
+      message: {
+        type: "danger",
+        msg: "internal server error",
+      },
+    });
   }
 });

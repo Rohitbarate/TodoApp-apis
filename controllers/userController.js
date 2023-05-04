@@ -74,7 +74,7 @@ exports.loginUser = Promise(async (req, res, next) => {
   try {
     let options = {
       path: "/*",
-      domain: ".localhost",
+      // domain: ".localhost",
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     };
@@ -106,7 +106,7 @@ exports.loginUser = Promise(async (req, res, next) => {
       .header({
         "Content-Type": "application/json",
         Accept: "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        // "Access-Control-Allow-Origin": "http://localhost:3000",
         "Access-Control-Allow-Credentials": "true",
         "Auth-token": token,
       })
