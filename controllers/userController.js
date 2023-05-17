@@ -4,9 +4,9 @@ const User = require("../models/user");
 
 // route(1) for register new user
 exports.registerUser = Promise(async (req, res, next) => {
-  const { name, email, password, mobileNo } = req.body;
+  const { name, email, mobileNo } = req.body;
 
-  if (!(email && name && password && mobileNo)) {
+  if (!(email && name && mobileNo)) {
     //    return next(new CustomAlert("All fiels are mandatory to fill!", 401));
     return res.status(401).json({
       message: {
@@ -23,9 +23,10 @@ exports.registerUser = Promise(async (req, res, next) => {
       user = await User.create({
         name,
         email,
-        password,
+        password: req.body?.password,
         mobileNo,
         photo: req.body?.photo,
+        provider: req.body?.provider,
       });
 
       return res.status(201).json({
@@ -34,6 +35,7 @@ exports.registerUser = Promise(async (req, res, next) => {
           msg: "sign in successfully. please login with same email..!",
         },
         user,
+        newUser: true,
       });
     }
     return res.status(401).json({
@@ -41,6 +43,7 @@ exports.registerUser = Promise(async (req, res, next) => {
         type: "warning",
         msg: "user with this email is already available...!",
       },
+      newUser: false,
     });
     // return next(
     //   new CustomAlert("user with this email is already available!", 401)
@@ -78,6 +81,7 @@ exports.loginUser = Promise(async (req, res, next) => {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     };
+
     let user = await User.findOne({ email: email }).select("+password");
     // check is user present with provided email
     if (!user) {

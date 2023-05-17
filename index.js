@@ -9,6 +9,7 @@ app.listen(PORT, () => {
   console.log(`Todo App is running on port : ${PORT}`);
 });
 
+
 // ........ // ** TODO START ** // ........ //
 
 // 0) add alert object to all res.json for alert e.g. {alert:{"message":"login successfully","type":"success"}}
