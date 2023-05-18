@@ -28,7 +28,7 @@ exports.registerUser = Promise(async (req, res, next) => {
         photo: req.body?.photo,
         provider: req.body?.provider,
       });
-
+      const token = await user.getJwtToken();
       return res.status(201).json({
         message: {
           type: "success",
@@ -36,6 +36,7 @@ exports.registerUser = Promise(async (req, res, next) => {
         },
         user,
         newUser: true,
+        token,
       });
     }
     return res.status(401).json({
