@@ -64,10 +64,10 @@ exports.registerUser = Promise(async (req, res, next) => {
 
 // route(2) for login existing user
 exports.loginUser = Promise(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, provider } = req.body;
 
   // check all fields shouldn't be empty
-  if (!(email && password)) {
+  if (!email) {
     //    return next(new CustomAlert("All fiels are mandatory to fill!", 401));
     return res.status(401).json({
       message: {
@@ -96,16 +96,19 @@ exports.loginUser = Promise(async (req, res, next) => {
       });
     }
     // check the password is correct or not
-    const isPasswordCorrect = await user.isPasswordCorrect(password);
-    if (!isPasswordCorrect) {
-      //    return next(new CustomAlert("Password is not valid,Check it once...!", 401));
-      return res.status(401).json({
-        message: {
-          type: "warning",
-          msg: "Password is invalid,Check it once....!",
-        },
-      });
+    if (provider !== "google") {
+      const isPasswordCorrect = await user.isPasswordCorrect(password);
+      if (!isPasswordCorrect) {
+        //    return next(new CustomAlert("Password is not valid,Check it once...!", 401));
+        return res.status(401).json({
+          message: {
+            type: "warning",
+            msg: "Password is invalid,Check it once....!",
+          },
+        });
+      }
     }
+
     const token = await user.getJwtToken();
     res
       .cookie("token", token, options)
@@ -132,7 +135,7 @@ exports.loginUser = Promise(async (req, res, next) => {
         type: "danger",
         msg: "login failed....!",
       },
-      error
+      error,
     });
   }
 });
