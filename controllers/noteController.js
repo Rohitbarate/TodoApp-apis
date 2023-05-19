@@ -73,6 +73,7 @@ exports.getNotes = Promise(async (req, res, next) => {
         type: "danger",
         msg: "error occured while fetching notes! try again.",
       },
+      error,
     });
   }
 });
@@ -108,7 +109,8 @@ exports.updateNote = Promise(async (req, res, next) => {
         message: {
           type: "danger",
           msg: "Selected note doesn't exist",
-        },});
+        },
+      });
     }
     return res.status(200).json({
       success: true,
@@ -125,6 +127,7 @@ exports.updateNote = Promise(async (req, res, next) => {
         type: "danger",
         msg: "Internal server error",
       },
+      error,
     });
   }
 });
@@ -159,6 +162,7 @@ exports.deleteNote = Promise(async (req, res, next) => {
         type: "danger",
         msg: "internal server error",
       },
+      error,
     });
   }
 });

@@ -57,6 +57,7 @@ exports.registerUser = Promise(async (req, res, next) => {
         type: "warning",
         msg: "server problem...! User can not be created....! try Again",
       },
+      error,
     });
   }
 });
@@ -131,6 +132,7 @@ exports.loginUser = Promise(async (req, res, next) => {
         type: "danger",
         msg: "login failed....!",
       },
+      error
     });
   }
 });
