@@ -32,7 +32,7 @@ exports.registerUser = Promise(async (req, res, next) => {
       return res.status(201).json({
         message: {
           type: "success",
-          msg: "sign in successfully. please login with same email..!",
+          msg: "sign in successfully...!",
         },
         user,
         newUser: true,
@@ -55,7 +55,7 @@ exports.registerUser = Promise(async (req, res, next) => {
     return res.status(401).json({
       message: {
         type: "warning",
-        msg: "server problem...! User can not be created....! try Again",
+        msg: "Failed to create new User....! try Again",
       },
       error,
     });
@@ -126,6 +126,7 @@ exports.loginUser = Promise(async (req, res, next) => {
           msg: "login successfully....!",
         },
         token,
+        user
       });
   } catch (error) {
     console.log("error : ", error);
