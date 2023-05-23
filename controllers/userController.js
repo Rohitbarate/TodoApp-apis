@@ -103,7 +103,7 @@ exports.loginUser = Promise(async (req, res, next) => {
         return res.status(401).json({
           message: {
             type: "warning",
-            msg: "Password is invalid,Check it once....!",
+            msg: "Invalid Password ...!",
           },
         });
       }
