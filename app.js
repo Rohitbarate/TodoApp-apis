@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 // testing
 app.get("/wistatussaver/shareappimage", (req, res) => {
-  res.status(200).send("success").download("./images/shareApp.png");
+  res.status(200).download("./images/shareApp.png")
 });
 
 // base url endpoint
